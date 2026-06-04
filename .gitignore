@@ -5,6 +5,7 @@ node_modules/
 dist/
 build/
 coverage/
+functions/lib/
 .turbo/
 .vite/
 
@@ -26,4 +27,3 @@ ui-debug.log
 .DS_Store
 .idea/
 .vscode/
-
