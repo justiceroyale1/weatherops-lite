@@ -1,0 +1,16 @@
+{
+  "name": "functions",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "echo \"functions build is not implemented yet\"",
+    "serve": "echo \"functions serve is not implemented yet\"",
+    "typecheck": "echo \"functions typecheck is not implemented yet\"",
+    "lint": "echo \"functions lint is not implemented yet\"",
+    "test": "echo \"functions tests are not implemented yet\""
+  }
+}

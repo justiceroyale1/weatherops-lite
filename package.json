@@ -1,0 +1,20 @@
+{
+  "name": "weatherops-lite",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Weather intelligence dashboard for farms and field operations.",
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build && pnpm --filter functions build",
+    "typecheck": "pnpm --filter web typecheck && pnpm --filter functions typecheck",
+    "lint": "pnpm --filter web lint && pnpm --filter functions lint",
+    "test": "pnpm --filter web test && pnpm --filter functions test",
+    "e2e": "pnpm --filter web e2e",
+    "firebase:emulators": "firebase emulators:start",
+    "deploy": "firebase deploy"
+  }
+}
