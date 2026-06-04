@@ -1,0 +1,29 @@
+# dependencies
+node_modules/
+
+# builds
+dist/
+build/
+coverage/
+.turbo/
+.vite/
+
+# env
+.env
+.env.*
+!.env.example
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# logs
+*.log
+
+# OS/editor
+.DS_Store
+.idea/
+.vscode/
+
