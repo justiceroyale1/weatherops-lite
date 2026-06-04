@@ -4,12 +4,23 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "echo \"web app scaffold is not implemented yet\"",
-    "build": "echo \"web build is not implemented yet\"",
-    "preview": "echo \"web preview is not implemented yet\"",
-    "typecheck": "echo \"web typecheck is not implemented yet\"",
-    "lint": "echo \"web lint is not implemented yet\"",
-    "test": "echo \"web tests are not implemented yet\"",
-    "e2e": "echo \"web e2e tests are not implemented yet\""
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "echo \"web lint is not configured yet\"",
+    "test": "echo \"web tests are not configured yet\"",
+    "e2e": "echo \"web e2e tests are not configured yet\""
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.0.7",
+    "typescript": "^5.7.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2"
   }
 }
