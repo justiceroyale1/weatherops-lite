@@ -27,3 +27,7 @@ ui-debug.log
 .DS_Store
 .idea/
 .vscode/
+
+.agents
+.codex
+.firebaserc
