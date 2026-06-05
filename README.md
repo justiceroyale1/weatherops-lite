@@ -12,6 +12,12 @@ This repository has been initialized as the codebase root. Implementation tasks 
 
 WeatherAI requests run through Firebase Functions so the API key stays server-side. The weather report form includes an AI summary toggle; when disabled, the backend sends `ai=false` to WeatherAI to preserve AI quota. The dashboard usage card reads quota data through the backend usage function and falls back without blocking weather reports when usage data is unavailable.
 
+## Local Functions And CORS
+
+Copy `.env.example` to `.env` and set `VITE_FIREBASE_PROJECT_ID` to the Firebase project id used by the emulator. The frontend builds the local Functions URL as `VITE_FUNCTIONS_EMULATOR_ORIGIN/VITE_FIREBASE_PROJECT_ID/us-central1` unless `VITE_FUNCTIONS_BASE_URL` is set. Use `VITE_FUNCTIONS_BASE_URL` when you want to override the full Functions base URL directly.
+
+To avoid CORS errors, include every local frontend origin in `ALLOWED_ORIGINS`, for example `http://localhost:5173,http://127.0.0.1:5173`. Restart the Firebase Functions emulator after changing backend environment values, and make sure the browser URL origin exactly matches one of the allowed origins.
+
 ## Commit Policy
 
 No coding or reviewer agent should commit directly. A task may be committed only after reviewer approval and human owner approval.

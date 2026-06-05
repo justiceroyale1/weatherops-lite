@@ -28,8 +28,12 @@ export interface ApiClientOptions {
   fetchImpl?: typeof fetch;
 }
 
+const localFunctionsProjectId =
+  import.meta.env.VITE_FIREBASE_PROJECT_ID ?? "weatherops-lite";
+const localFunctionsEmulatorOrigin =
+  import.meta.env.VITE_FUNCTIONS_EMULATOR_ORIGIN ?? "http://127.0.0.1:5001";
 const localFunctionsBaseUrl =
-  "http://127.0.0.1:5001/weatherops-lite/us-central1";
+  `${localFunctionsEmulatorOrigin}/${localFunctionsProjectId}/us-central1`;
 
 export class ApiClient {
   private readonly baseUrl: string;
