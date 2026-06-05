@@ -16,5 +16,5 @@
     "noEmitOnError": true
   },
   "include": ["src"],
-  "exclude": ["src/test"]
+  "exclude": ["src/test", "src/**/*.test.ts"]
 }
