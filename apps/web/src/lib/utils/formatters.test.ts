@@ -2,9 +2,11 @@ import { describe, expect, it } from "vitest";
 
 import {
   formatPercent,
+  formatQuotaValue,
   formatRainfall,
   formatTemperature,
   formatWind,
+  getProgressPercent,
 } from "./formatters";
 
 describe("formatters", () => {
@@ -19,5 +21,15 @@ describe("formatters", () => {
   it("renders fallback values", () => {
     expect(formatTemperature(undefined, "metric")).toBe("Not available");
     expect(formatRainfall(undefined)).toBe("Not available");
+  });
+
+  it("formats quota values and progress safely", () => {
+    expect(formatQuotaValue(25, 100)).toBe("25 / 100");
+    expect(formatQuotaValue(25, undefined)).toBe("25 used");
+    expect(formatQuotaValue(undefined, 100)).toBe("Usage unavailable");
+    expect(getProgressPercent(25, 100)).toBe(25);
+    expect(getProgressPercent(125, 100)).toBe(100);
+    expect(getProgressPercent(25, 0)).toBe(0);
+    expect(getProgressPercent(undefined, 100)).toBe(0);
   });
 });

@@ -32,6 +32,14 @@ export class WeatherAiClient {
       url.searchParams.set("ai", "false");
     }
 
+    return this.getJson(url);
+  }
+
+  async getUsage(): Promise<unknown> {
+    return this.getJson(new URL("/v1/usage", this.baseUrl));
+  }
+
+  private async getJson(url: URL): Promise<unknown> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), this.timeoutMs);
 

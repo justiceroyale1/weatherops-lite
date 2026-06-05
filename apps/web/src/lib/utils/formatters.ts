@@ -49,3 +49,35 @@ export function formatDateTime(value: string): string {
     minute: "2-digit",
   }).format(date);
 }
+
+export function formatQuotaValue(
+  used: number | undefined,
+  limit: number | undefined,
+): string {
+  if (used === undefined || !Number.isFinite(used)) {
+    return "Usage unavailable";
+  }
+
+  if (limit === undefined || !Number.isFinite(limit) || limit <= 0) {
+    return `${Math.round(used)} used`;
+  }
+
+  return `${Math.round(used)} / ${Math.round(limit)}`;
+}
+
+export function getProgressPercent(
+  used: number | undefined,
+  limit: number | undefined,
+): number {
+  if (
+    used === undefined ||
+    limit === undefined ||
+    !Number.isFinite(used) ||
+    !Number.isFinite(limit) ||
+    limit <= 0
+  ) {
+    return 0;
+  }
+
+  return Math.max(0, Math.min(100, Math.round((used / limit) * 100)));
+}

@@ -2,6 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { SavedLocationsPanel } from "@/features/locations/saved-locations-panel";
+import { UsageCard } from "@/features/usage/usage-card";
 import {
   DashboardEmptyState,
   DashboardErrorState,
@@ -85,10 +86,13 @@ export function App() {
         </header>
 
         <div className="grid gap-4 xl:grid-cols-[0.95fr_1.25fr]">
-          <SavedLocationsPanel
-            isRefreshing={weatherReport.isPending}
-            onUseLocation={handleUseLocation}
-          />
+          <div className="space-y-4">
+            <SavedLocationsPanel
+              isRefreshing={weatherReport.isPending}
+              onUseLocation={handleUseLocation}
+            />
+            <UsageCard />
+          </div>
           <WeatherForm
             isSubmitting={weatherReport.isPending}
             onSubmit={handleSubmit}

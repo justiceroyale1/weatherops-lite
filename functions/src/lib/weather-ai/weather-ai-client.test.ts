@@ -61,6 +61,28 @@ describe("WeatherAiClient", () => {
     });
   });
 
+  it("builds the WeatherAI usage URL with server-side authorization", async () => {
+    let requestedUrl: URL | undefined;
+    let authorizationHeader: string | null = null;
+    const client = new WeatherAiClient({
+      apiKey: "test-secret",
+      baseUrl: "https://example.test",
+      fetchImpl: (async (input: URL | RequestInfo, init?: RequestInit) => {
+        requestedUrl = input as URL;
+        authorizationHeader = new Headers(init?.headers).get("Authorization");
+
+        return jsonResponse({
+          plan: "Free",
+        });
+      }) as typeof fetch,
+    });
+
+    await client.getUsage();
+
+    expect(requestedUrl?.toString()).toBe("https://example.test/v1/usage");
+    expect(authorizationHeader).toBe("Bearer test-secret");
+  });
+
   it("maps timeout failures to service unavailable", async () => {
     const abortError = new Error("The operation was aborted.");
     abortError.name = "AbortError";
