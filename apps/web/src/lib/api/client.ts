@@ -33,18 +33,31 @@ const localFunctionsBaseUrl =
 
 export class ApiClient {
   private readonly baseUrl: string;
-  private readonly fetchImpl: typeof fetch;
+  private readonly fetchImpl?: typeof fetch;
 
   constructor(options: ApiClientOptions = {}) {
     this.baseUrl =
       options.baseUrl ??
       import.meta.env.VITE_FUNCTIONS_BASE_URL ??
       localFunctionsBaseUrl;
-    this.fetchImpl = options.fetchImpl ?? fetch;
+    this.fetchImpl = options.fetchImpl;
+  }
+
+  async get<TResponse>(path: string): Promise<TResponse> {
+    const response = await this.getFetch()(`${this.baseUrl}${path}`, {
+      method: "GET",
+    });
+    const payload = (await response.json().catch(() => undefined)) as unknown;
+
+    if (!response.ok) {
+      throw toClientError(payload, response.status);
+    }
+
+    return payload as TResponse;
   }
 
   async post<TResponse>(path: string, body: unknown): Promise<TResponse> {
-    const response = await this.fetchImpl(`${this.baseUrl}${path}`, {
+    const response = await this.getFetch()(`${this.baseUrl}${path}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -58,6 +71,25 @@ export class ApiClient {
     }
 
     return payload as TResponse;
+  }
+
+  async delete(path: string, body: unknown): Promise<void> {
+    const response = await this.getFetch()(`${this.baseUrl}${path}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    const payload = (await response.json().catch(() => undefined)) as unknown;
+
+    if (!response.ok) {
+      throw toClientError(payload, response.status);
+    }
+  }
+
+  private getFetch(): typeof fetch {
+    return this.fetchImpl ?? fetch;
   }
 }
 

@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 
 import type { RuntimeConfig } from "../../config";
+import type {
+  LocationLastRiskUpdate,
+  LocationProfile,
+  LocationRepository,
+} from "../locations";
+import type { CreateLocationInput } from "../../schemas";
 import { WeatherService, type WeatherDataClient } from "./weather-service";
 
 const baseConfig: RuntimeConfig = {
@@ -105,4 +111,61 @@ describe("WeatherService", () => {
       ]),
     );
   });
+
+  it("updates saved location last risk after a location refresh", async () => {
+    const repository = new SpyLocationRepository();
+    const service = new WeatherService({
+      config: {
+        ...baseConfig,
+        enableDemoMode: true,
+      },
+      locationRepository: repository,
+      now: () => new Date("2026-06-05T09:00:00.000Z"),
+    });
+
+    const response = await service.getDashboardWeather({
+      lat: -1.286389,
+      lon: 36.817223,
+      units: "metric",
+      days: 3,
+      includeAi: true,
+      locationId: "demo-nairobi-kenya",
+    });
+
+    expect(repository.lastUpdate).toEqual({
+      id: "demo-nairobi-kenya",
+      update: {
+        riskScore: response.risk.score,
+        riskLevel: response.risk.level,
+        checkedAt: "2026-06-05T09:00:00.000Z",
+      },
+    });
+  });
 });
+
+class SpyLocationRepository implements LocationRepository {
+  lastUpdate?: { id: string; update: LocationLastRiskUpdate };
+
+  async create(_input: CreateLocationInput): Promise<LocationProfile> {
+    throw new Error("not used");
+  }
+
+  async delete(_id: string): Promise<void> {
+    throw new Error("not used");
+  }
+
+  async ensureDefaults(): Promise<void> {
+    throw new Error("not used");
+  }
+
+  async list(): Promise<LocationProfile[]> {
+    throw new Error("not used");
+  }
+
+  async updateLastRisk(
+    id: string,
+    update: LocationLastRiskUpdate,
+  ): Promise<void> {
+    this.lastUpdate = { id, update };
+  }
+}

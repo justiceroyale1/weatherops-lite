@@ -37,7 +37,7 @@ export function WeatherForm({ isSubmitting, onSubmit }: WeatherFormProps) {
 
   return (
     <form
-      className="grid gap-4 rounded-lg border bg-card p-4 shadow-sm lg:grid-cols-[1fr_1fr_0.8fr_0.8fr_auto] lg:items-end"
+      className="grid gap-4 rounded-lg border bg-card p-4 shadow-sm md:grid-cols-2 2xl:grid-cols-[1fr_1fr_0.8fr_0.8fr_auto] 2xl:items-end"
       noValidate
       onSubmit={handleSubmit(onSubmit)}
     >

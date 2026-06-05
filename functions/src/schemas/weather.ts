@@ -6,6 +6,7 @@ export const weatherRequestSchema = z.object({
   units: z.enum(["metric", "imperial"]),
   days: z.number().int().min(1).max(7),
   includeAi: z.boolean(),
+  locationId: z.string().min(1).max(120).optional(),
 });
 
 export type WeatherRequest = z.infer<typeof weatherRequestSchema>;

@@ -6,6 +6,7 @@ export interface WeatherRequest {
   units: "metric" | "imperial";
   days: number;
   includeAi: boolean;
+  locationId?: string;
 }
 
 export interface RiskFactor {

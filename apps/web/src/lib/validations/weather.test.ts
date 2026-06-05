@@ -21,6 +21,18 @@ describe("weatherFormSchema", () => {
     });
   });
 
+  it("accepts an optional saved location id", () => {
+    const parsed = weatherFormSchema.parse({
+      lat: "-1.286389",
+      lon: "36.817223",
+      units: "metric",
+      days: "3",
+      includeAi: true,
+    });
+
+    expect(parsed.lat).toBe(-1.286389);
+  });
+
   it("rejects invalid coordinates and days", () => {
     const result = weatherFormSchema.safeParse({
       lat: 91,

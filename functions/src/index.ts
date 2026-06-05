@@ -1,5 +1,6 @@
 import { onRequest } from "firebase-functions/v2/https";
 
+import { handleLocationRequest } from "./controllers/location-controller";
 import { handleWeatherRequest } from "./controllers/weather-controller";
 
 export const health = onRequest((_request, response) => {
@@ -10,3 +11,4 @@ export const health = onRequest((_request, response) => {
 });
 
 export const weather = onRequest(handleWeatherRequest);
+export const locations = onRequest(handleLocationRequest);

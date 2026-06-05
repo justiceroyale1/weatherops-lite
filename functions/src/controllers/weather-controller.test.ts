@@ -39,7 +39,7 @@ describe("handleWeatherRequest", () => {
     expect(response.statusCode).toBe(204);
     expect(response.sentBody).toBe("");
     expect(response.headers["Access-Control-Allow-Methods"]).toBe(
-      "POST, OPTIONS",
+      "GET, POST, DELETE, OPTIONS",
     );
   });
 

@@ -1,5 +1,7 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
+import { SavedLocationsPanel } from "@/features/locations/saved-locations-panel";
 import {
   DashboardEmptyState,
   DashboardErrorState,
@@ -9,6 +11,7 @@ import {
 import { useWeatherReportMutation } from "@/features/weather/api";
 import { WeatherForm } from "@/features/weather/weather-form";
 import type { WeatherFormValues } from "@/lib/validations/weather";
+import type { LocationProfile } from "@/types/location";
 import type { WeatherRequest } from "@/types/weather";
 
 export function App() {
@@ -19,6 +22,7 @@ export function App() {
     days: 3,
     includeAi: true,
   });
+  const queryClient = useQueryClient();
   const weatherReport = useWeatherReportMutation();
 
   function handleSubmit(values: WeatherFormValues) {
@@ -31,7 +35,31 @@ export function App() {
     };
 
     setLastRequest(request);
-    weatherReport.mutate(request);
+    weatherReport.mutate(request, {
+      onSuccess: async () => {
+        if (request.locationId) {
+          await queryClient.invalidateQueries({ queryKey: ["locations"] });
+        }
+      },
+    });
+  }
+
+  function handleUseLocation(location: LocationProfile) {
+    const request: WeatherRequest = {
+      lat: location.lat,
+      lon: location.lon,
+      units: lastRequest.units,
+      days: lastRequest.days,
+      includeAi: lastRequest.includeAi,
+      locationId: location.id,
+    };
+
+    setLastRequest(request);
+    weatherReport.mutate(request, {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({ queryKey: ["locations"] });
+      },
+    });
   }
 
   return (
@@ -56,10 +84,16 @@ export function App() {
           </div>
         </header>
 
-        <WeatherForm
-          isSubmitting={weatherReport.isPending}
-          onSubmit={handleSubmit}
-        />
+        <div className="grid gap-4 xl:grid-cols-[0.95fr_1.25fr]">
+          <SavedLocationsPanel
+            isRefreshing={weatherReport.isPending}
+            onUseLocation={handleUseLocation}
+          />
+          <WeatherForm
+            isSubmitting={weatherReport.isPending}
+            onSubmit={handleSubmit}
+          />
+        </div>
 
         {weatherReport.isError ? (
           <DashboardErrorState

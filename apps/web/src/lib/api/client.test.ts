@@ -25,6 +25,39 @@ describe("ApiClient", () => {
     expect(response.ok).toBe(true);
   });
 
+  it("gets JSON from the backend function", async () => {
+    let requestUrl = "";
+    const client = new ApiClient({
+      baseUrl: "https://functions.test",
+      fetchImpl: (async (input: RequestInfo | URL) => {
+        requestUrl = String(input);
+
+        return jsonResponse({ locations: [] });
+      }) as typeof fetch,
+    });
+
+    const response = await client.get<{ locations: unknown[] }>("/locations");
+
+    expect(requestUrl).toBe("https://functions.test/locations");
+    expect(response.locations).toEqual([]);
+  });
+
+  it("deletes JSON through the backend function", async () => {
+    let requestBody = "";
+    const client = new ApiClient({
+      baseUrl: "https://functions.test",
+      fetchImpl: (async (_input: RequestInfo | URL, init?: RequestInit) => {
+        requestBody = String(init?.body);
+
+        return jsonResponse(undefined, 204);
+      }) as typeof fetch,
+    });
+
+    await client.delete("/locations", { id: "demo-nairobi-kenya" });
+
+    expect(requestBody).toBe(JSON.stringify({ id: "demo-nairobi-kenya" }));
+  });
+
   it("maps safe backend errors", async () => {
     const client = new ApiClient({
       baseUrl: "https://functions.test",

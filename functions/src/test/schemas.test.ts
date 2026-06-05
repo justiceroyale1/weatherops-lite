@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  createLocationSchema,
   treeAnalysisMetadataSchema,
   usageRequestSchema,
   weatherRequestSchema,
@@ -38,6 +39,32 @@ describe("weatherRequestSchema", () => {
       units: "kelvin",
       days: 8,
       includeAi: true,
+    });
+
+    expect(result.success).toBe(false);
+  });
+});
+
+describe("createLocationSchema", () => {
+  it("accepts valid location input", () => {
+    const parsed = createLocationSchema.parse({
+      name: "Nairobi, Kenya",
+      type: "farm",
+      lat: -1.286389,
+      lon: 36.817223,
+      notes: "Default demo location.",
+    });
+
+    expect(parsed.name).toBe("Nairobi, Kenya");
+  });
+
+  it("rejects invalid location input", () => {
+    const result = createLocationSchema.safeParse({
+      name: "N",
+      type: "office",
+      lat: -91,
+      lon: 181,
+      notes: "x".repeat(301),
     });
 
     expect(result.success).toBe(false);
