@@ -77,6 +77,20 @@ export class ApiClient {
     return payload as TResponse;
   }
 
+  async postForm<TResponse>(path: string, body: FormData): Promise<TResponse> {
+    const response = await this.getFetch()(`${this.baseUrl}${path}`, {
+      method: "POST",
+      body,
+    });
+    const payload = await response.json().catch(() => undefined) as unknown;
+
+    if (!response.ok) {
+      throw toClientError(payload, response.status);
+    }
+
+    return payload as TResponse;
+  }
+
   async delete(path: string, body: unknown): Promise<void> {
     const response = await this.getFetch()(`${this.baseUrl}${path}`, {
       method: "DELETE",

@@ -2,6 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { SavedLocationsPanel } from "@/features/locations/saved-locations-panel";
+import { TreeAnalysisPanel } from "@/features/tree-analysis/tree-analysis-panel";
 import { UsageCard } from "@/features/usage/usage-card";
 import {
   DashboardEmptyState,
@@ -120,6 +121,8 @@ export function App() {
         !weatherReport.isError ? (
           <DashboardEmptyState />
         ) : null}
+
+        <TreeAnalysisPanel />
       </div>
     </main>
   );

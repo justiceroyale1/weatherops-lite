@@ -1,5 +1,6 @@
 import { AppError } from "../errors";
-import type { WeatherRequest } from "../../schemas";
+import type { TreeAnalysisMetadata, WeatherRequest } from "../../schemas";
+import type { TreeAnalysisFile } from "../../services/tree-analysis/types";
 
 export interface WeatherAiClientOptions {
   apiKey: string;
@@ -39,6 +40,26 @@ export class WeatherAiClient {
     return this.getJson(new URL("/v1/usage", this.baseUrl));
   }
 
+  async analyzeTrees(
+    file: TreeAnalysisFile,
+    metadata: TreeAnalysisMetadata,
+  ): Promise<unknown> {
+    const formData = new FormData();
+    formData.set(
+      "image",
+      new Blob([file.buffer], { type: file.contentType }),
+      file.filename,
+    );
+
+    for (const [key, value] of Object.entries(metadata)) {
+      if (value !== undefined) {
+        formData.set(key, String(value));
+      }
+    }
+
+    return this.postForm(new URL("/v1/trees/analyze", this.baseUrl), formData);
+  }
+
   private async getJson(url: URL): Promise<unknown> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), this.timeoutMs);
@@ -68,6 +89,59 @@ export class WeatherAiClient {
       }
 
       return body;
+    } catch (error) {
+      if (error instanceof AppError) {
+        throw error;
+      }
+
+      if (isAbortError(error)) {
+        throw new AppError(
+          "SERVICE_UNAVAILABLE",
+          504,
+          "WeatherAI request timed out.",
+        );
+      }
+
+      throw new AppError(
+        "UPSTREAM_ERROR",
+        502,
+        "WeatherAI returned an unexpected error.",
+      );
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  private async postForm(url: URL, body: FormData): Promise<unknown> {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), this.timeoutMs);
+
+    try {
+      const response = await this.fetchImpl(url, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          Accept: "application/json",
+        },
+        body,
+        signal: controller.signal,
+      });
+
+      if (!response.ok) {
+        throw mapWeatherAiStatus(response.status);
+      }
+
+      const responseBody = await response.json();
+
+      if (!isRecord(responseBody)) {
+        throw new AppError(
+          "UPSTREAM_ERROR",
+          502,
+          "WeatherAI returned an unexpected response.",
+        );
+      }
+
+      return responseBody;
     } catch (error) {
       if (error instanceof AppError) {
         throw error;

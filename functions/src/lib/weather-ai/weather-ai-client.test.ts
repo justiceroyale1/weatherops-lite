@@ -83,6 +83,42 @@ describe("WeatherAiClient", () => {
     expect(authorizationHeader).toBe("Bearer test-secret");
   });
 
+  it("sends tree analysis multipart requests with server-side authorization", async () => {
+    let requestedUrl: URL | undefined;
+    let authorizationHeader: string | null = null;
+    let requestBody: BodyInit | null | undefined;
+    const client = new WeatherAiClient({
+      apiKey: "test-secret",
+      baseUrl: "https://example.test",
+      fetchImpl: (async (input: URL | RequestInfo, init?: RequestInit) => {
+        requestedUrl = input as URL;
+        authorizationHeader = new Headers(init?.headers).get("Authorization");
+        requestBody = init?.body;
+
+        return jsonResponse({
+          observations: [],
+          recommendations: [],
+        });
+      }) as typeof fetch,
+    });
+
+    await client.analyzeTrees(
+      {
+        buffer: Buffer.alloc(128),
+        contentType: "image/png",
+        filename: "field.png",
+        size: 128,
+      },
+      {
+        locationName: "North Farm",
+      },
+    );
+
+    expect(requestedUrl?.toString()).toBe("https://example.test/v1/trees/analyze");
+    expect(authorizationHeader).toBe("Bearer test-secret");
+    expect(requestBody).toBeInstanceOf(FormData);
+  });
+
   it("maps timeout failures to service unavailable", async () => {
     const abortError = new Error("The operation was aborted.");
     abortError.name = "AbortError";

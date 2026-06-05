@@ -18,6 +18,10 @@ Copy `.env.example` to `.env` and set `VITE_FIREBASE_PROJECT_ID` to the Firebase
 
 To avoid CORS errors, include every local frontend origin in `ALLOWED_ORIGINS`, for example `http://localhost:5173,http://127.0.0.1:5173`. Restart the Firebase Functions emulator after changing backend environment values, and make sure the browser URL origin exactly matches one of the allowed origins.
 
+## Tree Analysis
+
+Tree analysis uploads are sent to Firebase Functions as `multipart/form-data`; the frontend validates JPEG, PNG, and WebP images up to 8MB before upload. The backend keeps WeatherAI credentials server-side, stores successful analysis summaries in Firestore, and uses a clearly labeled deterministic demo fallback when WeatherAI tree analysis is unavailable.
+
 ## Commit Policy
 
 No coding or reviewer agent should commit directly. A task may be committed only after reviewer approval and human owner approval.

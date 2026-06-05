@@ -1,6 +1,7 @@
 import { onRequest } from "firebase-functions/v2/https";
 
 import { handleLocationRequest } from "./controllers/location-controller";
+import { handleTreeAnalysisRequest } from "./controllers/tree-analysis-controller";
 import { handleUsageRequest } from "./controllers/usage-controller";
 import { handleWeatherRequest } from "./controllers/weather-controller";
 
@@ -14,3 +15,4 @@ export const health = onRequest((_request, response) => {
 export const weather = onRequest(handleWeatherRequest);
 export const locations = onRequest(handleLocationRequest);
 export const usage = onRequest(handleUsageRequest);
+export const treeAnalysis = onRequest(handleTreeAnalysisRequest);
