@@ -7,9 +7,9 @@
 
 WeatherOps Lite is a WeatherAI technical challenge project for farms, forestry teams, and field operations. It turns weather data, quota awareness, saved locations, and tree-image analysis into operational risk guidance.
 
-Live URL: _add Firebase Hosting URL after deployment_
+## Screenshot
 
-Screenshots: _add final desktop and mobile screenshots after deployment_
+![WeatherOps Lite Demo](images/demo.png)
 
 ## What To Review First
 
