@@ -1,5 +1,10 @@
 # WeatherOps Lite
 
+[![CI](https://github.com/justiceroyale1/weatherops-lite/actions/workflows/ci.yml/badge.svg)](https://github.com/justiceroyale1/weatherops-lite/actions/workflows/ci.yml)
+
+[![Deploy](https://github.com/justiceroyale1/weatherops-lite/actions/workflows/deploy.yml/badge.svg)](https://github.com/justiceroyale1/weatherops-lite/actions/workflows/deploy.yml)
+
+
 WeatherOps Lite is a WeatherAI technical challenge project for farms, forestry teams, and field operations. It turns weather data, quota awareness, saved locations, and tree-image analysis into operational risk guidance.
 
 Live URL: _add Firebase Hosting URL after deployment_
