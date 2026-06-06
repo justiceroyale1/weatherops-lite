@@ -22,7 +22,6 @@ const defaultValues: WeatherFormInput = {
   lon: 3.3792,
   units: "metric",
   days: 3,
-  includeAi: true,
 };
 
 export function WeatherForm({ isSubmitting, onSubmit }: WeatherFormProps) {
@@ -87,16 +86,7 @@ export function WeatherForm({ isSubmitting, onSubmit }: WeatherFormProps) {
           {...register("days")}
         />
       </Field>
-      <div className="flex flex-col gap-3">
-        <label className="flex min-h-9 items-center gap-2 text-sm">
-          <input
-            className="h-4 w-4 rounded border-input accent-primary"
-            disabled={isSubmitting}
-            type="checkbox"
-            {...register("includeAi")}
-          />
-          AI summary
-        </label>
+      <div className="md:col-span-2 2xl:col-span-1">
         <Button className="w-full" disabled={isSubmitting} type="submit">
           {isSubmitting ? (
             <Loader2 aria-hidden="true" className="h-4 w-4 animate-spin" />

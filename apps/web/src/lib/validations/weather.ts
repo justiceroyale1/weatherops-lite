@@ -15,7 +15,6 @@ export const weatherFormSchema = z.object({
     .int("Forecast days must be a whole number.")
     .min(1, "Forecast days must be at least 1.")
     .max(7, "Forecast days cannot be more than 7."),
-  includeAi: z.boolean(),
 });
 
 export type WeatherFormInput = z.input<typeof weatherFormSchema>;

@@ -70,7 +70,6 @@ export interface WeatherDashboardResponse {
   current: CurrentWeather;
   hourly: HourlyForecastPoint[];
   daily: DailyForecastPoint[];
-  aiSummary?: string;
   risk: RiskAssessment;
   fetchedAt: string;
   source: "weatherai" | "demo";

@@ -95,8 +95,6 @@ test.beforeEach(async ({ page }) => {
             rainfallMm: 6.3,
           },
         ],
-        aiSummary:
-          "Demo conditions are suitable for field work with routine rain monitoring.",
         risk: {
           score: 38,
           level: "Medium",
@@ -158,6 +156,6 @@ test("renders the dashboard smoke path with mocked backend data", async ({
   await expect(page.getByRole("heading", { name: "Risk Score" })).toBeVisible();
   await expect(page.getByText("38 / 100")).toBeVisible();
   await expect(page.getByText("Current Weather")).toBeVisible();
-  await expect(page.getByText("Demo conditions are suitable")).toBeVisible();
+  await expect(page.getByText("AI Summary")).not.toBeVisible();
   await expect(page.getByText("Schedule spraying around rain windows")).toBeVisible();
 });

@@ -38,8 +38,5 @@ export function createDemoWeatherPayload(input: WeatherRequest): Record<string, 
     },
     hourly,
     daily,
-    aiSummary: input.includeAi
-      ? "Demo summary: warm, humid field conditions with rain risk later today."
-      : undefined,
   };
 }

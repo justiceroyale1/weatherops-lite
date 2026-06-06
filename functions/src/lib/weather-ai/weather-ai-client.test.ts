@@ -4,7 +4,7 @@ import { toApiErrorResponse } from "../errors";
 import { WeatherAiClient } from "./weather-ai-client";
 
 describe("WeatherAiClient", () => {
-  it("builds the WeatherAI URL and sends ai=false when AI is disabled", async () => {
+  it("builds the WeatherAI weather URL with server-side authorization", async () => {
     let requestedUrl: URL | undefined;
     let authorizationHeader: string | null = null;
     const fetchImpl = async (input: URL | RequestInfo, init?: RequestInit) => {
@@ -27,11 +27,10 @@ describe("WeatherAiClient", () => {
       lon: 3.3792,
       units: "metric",
       days: 7,
-      includeAi: false,
     });
 
     expect(requestedUrl?.toString()).toBe(
-      "https://example.test/v1/weather?lat=6.5244&lon=3.3792&units=metric&days=7&ai=false",
+      "https://example.test/v1/weather?lat=6.5244&lon=3.3792&units=metric&days=7",
     );
     expect(authorizationHeader).toBe("Bearer test-secret");
   });
@@ -53,7 +52,6 @@ describe("WeatherAiClient", () => {
         lon: 0,
         units: "metric",
         days: 1,
-        includeAi: true,
       }),
     ).rejects.toMatchObject({
       code,
@@ -135,7 +133,6 @@ describe("WeatherAiClient", () => {
         lon: 0,
         units: "metric",
         days: 1,
-        includeAi: true,
       }),
     ).rejects.toMatchObject({
       code: "SERVICE_UNAVAILABLE",
@@ -155,7 +152,6 @@ describe("WeatherAiClient", () => {
         lon: 0,
         units: "metric",
         days: 1,
-        includeAi: true,
       });
     } catch (error) {
       const response = toApiErrorResponse(error);

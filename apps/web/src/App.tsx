@@ -27,7 +27,6 @@ export function App() {
     lon: 3.3792,
     units: "metric",
     days: 3,
-    includeAi: true,
   });
   const queryClient = useQueryClient();
   const weatherReport = useWeatherReportMutation();
@@ -38,7 +37,6 @@ export function App() {
       lon: values.lon,
       units: values.units,
       days: values.days,
-      includeAi: values.includeAi,
     };
 
     setLastRequest(request);
@@ -57,7 +55,6 @@ export function App() {
       lon: location.lon,
       units: lastRequest.units,
       days: lastRequest.days,
-      includeAi: lastRequest.includeAi,
       locationId: location.id,
     };
 

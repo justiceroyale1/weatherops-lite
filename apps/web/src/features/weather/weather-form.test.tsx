@@ -47,8 +47,13 @@ describe("WeatherForm", () => {
       lon: 3.3792,
       units: "metric",
       days: 3,
-      includeAi: true,
     });
+  });
+
+  it("does not show unavailable AI summary controls", () => {
+    render(<WeatherForm isSubmitting={false} onSubmit={vi.fn()} />);
+
+    expect(screen.queryByLabelText(/AI summary/i)).not.toBeInTheDocument();
   });
 
   it("disables submit while loading", () => {

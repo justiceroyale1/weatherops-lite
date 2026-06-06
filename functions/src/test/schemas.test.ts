@@ -14,7 +14,6 @@ describe("weatherRequestSchema", () => {
       lon: 3.3792,
       units: "metric",
       days: 7,
-      includeAi: true,
     });
 
     expect(parsed.units).toBe("metric");
@@ -26,10 +25,9 @@ describe("weatherRequestSchema", () => {
       lon: -74.006,
       units: "imperial",
       days: 3,
-      includeAi: false,
     });
 
-    expect(parsed.includeAi).toBe(false);
+    expect(parsed.days).toBe(3);
   });
 
   it("rejects invalid coordinates, units, and days", () => {
@@ -38,7 +36,6 @@ describe("weatherRequestSchema", () => {
       lon: -181,
       units: "kelvin",
       days: 8,
-      includeAi: true,
     });
 
     expect(result.success).toBe(false);

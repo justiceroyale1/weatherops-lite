@@ -14,7 +14,6 @@ const request: WeatherRequest = {
   lon: 3.3792,
   units: "metric",
   days: 3,
-  includeAi: true,
 };
 
 const report: WeatherDashboardResponse = {
@@ -48,7 +47,6 @@ const report: WeatherDashboardResponse = {
       rainfallMm: 9,
     },
   ],
-  aiSummary: "Warm, humid field conditions with rain risk later today.",
   risk: {
     score: 55,
     level: "High",
@@ -105,25 +103,11 @@ describe("dashboard states", () => {
     expect(screen.getByText("55 / 100")).toBeVisible();
     expect(screen.getAllByText("High")[0]).toBeVisible();
     expect(screen.getByText("Current Weather")).toBeVisible();
-    expect(screen.getByText("AI Summary")).toBeVisible();
     expect(screen.getByText("Hourly Forecast")).toBeVisible();
     expect(screen.getByText("Daily Forecast")).toBeVisible();
     expect(screen.getByText("Risk Factors")).toBeVisible();
     expect(screen.getByText("Recommendations")).toBeVisible();
     expect(screen.getByText("Adjust rain-sensitive work")).toBeVisible();
-  });
-
-  it("shows AI fallback when AI summary is missing", () => {
-    render(
-      <DashboardReport
-        report={{
-          ...report,
-          aiSummary: undefined,
-        }}
-        request={request}
-      />,
-    );
-
-    expect(screen.getByText(/AI summary is disabled or unavailable/i)).toBeVisible();
+    expect(screen.queryByText("AI Summary")).not.toBeInTheDocument();
   });
 });

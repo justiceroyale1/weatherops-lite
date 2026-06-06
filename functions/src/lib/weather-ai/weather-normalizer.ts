@@ -49,9 +49,6 @@ export function normalizeWeatherAiWeather(
   const current = normalizeCurrent(currentRaw, currentFallbackRaw);
   const hourly = hourlyRaw.map(normalizeHourlyPoint);
   const daily = dailyRaw.slice(0, options.request.days).map(normalizeDailyPoint);
-  const aiSummary = options.request.includeAi
-    ? stringFrom(data.aiSummary, data.summary, asRecord(data.ai)?.summary)
-    : undefined;
 
   return {
     dashboard: {
@@ -59,7 +56,6 @@ export function normalizeWeatherAiWeather(
       current,
       hourly,
       daily,
-      ...(aiSummary ? { aiSummary } : {}),
       fetchedAt: options.fetchedAt,
       source: options.source,
     },

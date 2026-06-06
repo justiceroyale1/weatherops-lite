@@ -30,13 +30,12 @@ describe("WeatherService", () => {
       lon: 3.3792,
       units: "metric",
       days: 3,
-      includeAi: true,
     });
 
     expect(response.source).toBe("demo");
     expect(response.location.resolvedName).toBe("Demo Field Site");
     expect(response.risk.level).toBe("High");
-    expect(response.aiSummary).toContain("Demo summary");
+    expect(response).not.toHaveProperty("aiSummary");
   });
 
   it("returns demo fallback when no WeatherAI API key is configured", async () => {
@@ -50,11 +49,10 @@ describe("WeatherService", () => {
       lon: 3.3792,
       units: "metric",
       days: 1,
-      includeAi: false,
     });
 
     expect(response.source).toBe("demo");
-    expect(response.aiSummary).toBeUndefined();
+    expect(response).not.toHaveProperty("aiSummary");
   });
 
   it("returns normalized WeatherAI response and calculated risk", async () => {
@@ -79,7 +77,6 @@ describe("WeatherService", () => {
               rainfallMm: 14,
             },
           ],
-          aiSummary: "High-risk field conditions.",
         };
       },
     };
@@ -97,7 +94,6 @@ describe("WeatherService", () => {
       lon: 3.3792,
       units: "metric",
       days: 1,
-      includeAi: true,
     });
 
     expect(response.source).toBe("weatherai");
@@ -128,7 +124,6 @@ describe("WeatherService", () => {
       lon: 36.817223,
       units: "metric",
       days: 3,
-      includeAi: true,
       locationId: "demo-nairobi-kenya",
     });
 

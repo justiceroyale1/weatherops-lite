@@ -5,7 +5,6 @@ export interface WeatherRequest {
   lon: number;
   units: "metric" | "imperial";
   days: number;
-  includeAi: boolean;
   locationId?: string;
 }
 
@@ -112,7 +111,6 @@ export interface WeatherDashboardResponse {
   current: CurrentWeather;
   hourly: HourlyForecastPoint[];
   daily: DailyForecastPoint[];
-  aiSummary?: string;
   risk: RiskAssessment;
   fetchedAt: string;
   source: "weatherai" | "demo";

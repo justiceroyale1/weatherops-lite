@@ -29,10 +29,6 @@ export class WeatherAiClient {
     url.searchParams.set("units", input.units);
     url.searchParams.set("days", String(input.days));
 
-    if (!input.includeAi) {
-      url.searchParams.set("ai", "false");
-    }
-
     return this.getJson(url);
   }
 

@@ -75,10 +75,9 @@ export function DashboardReport({
 }) {
   return (
     <div className="space-y-4">
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-4 lg:grid-cols-2">
         <RiskScoreCard report={report} />
         <CurrentWeatherCard report={report} request={request} />
-        <AiSummaryCard report={report} />
       </div>
       <div className="grid gap-4 xl:grid-cols-2">
         <HourlyForecastChart hourly={report.hourly} request={request} />
@@ -146,25 +145,6 @@ function CurrentWeatherCard({
         </dl>
         <p className="text-sm text-muted-foreground">
           {report.current.conditionText ?? "Condition not available"}
-        </p>
-      </CardContent>
-    </Card>
-  );
-}
-
-function AiSummaryCard({ report }: { report: WeatherDashboardResponse }) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>AI Summary</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        <p className="text-sm leading-6 text-muted-foreground">
-          {report.aiSummary ??
-            "AI summary is disabled or unavailable for this report."}
-        </p>
-        <p className="text-xs text-muted-foreground">
-          Fetched {formatDateTime(report.fetchedAt)}
         </p>
       </CardContent>
     </Card>

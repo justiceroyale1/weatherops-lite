@@ -9,7 +9,6 @@ describe("weatherFormSchema", () => {
       lon: "3.3792",
       units: "metric",
       days: "7",
-      includeAi: true,
     });
 
     expect(parsed).toEqual({
@@ -17,7 +16,6 @@ describe("weatherFormSchema", () => {
       lon: 3.3792,
       units: "metric",
       days: 7,
-      includeAi: true,
     });
   });
 
@@ -27,7 +25,6 @@ describe("weatherFormSchema", () => {
       lon: "36.817223",
       units: "metric",
       days: "3",
-      includeAi: true,
     });
 
     expect(parsed.lat).toBe(-1.286389);
@@ -39,7 +36,6 @@ describe("weatherFormSchema", () => {
       lon: -181,
       units: "metric",
       days: 8,
-      includeAi: false,
     });
 
     expect(result.success).toBe(false);

@@ -10,7 +10,6 @@ describe("toApiErrorResponse", () => {
       lon: 0,
       units: "metric",
       days: 7,
-      includeAi: true,
     });
 
     expect(result.success).toBe(false);

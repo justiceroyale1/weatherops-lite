@@ -8,7 +8,6 @@ const request: WeatherRequest = {
   lon: 3.3792,
   units: "metric",
   days: 3,
-  includeAi: true,
 };
 
 describe("normalizeWeatherAiWeather", () => {
@@ -53,7 +52,6 @@ describe("normalizeWeatherAiWeather", () => {
             },
           ],
         },
-        aiSummary: "Field conditions are workable with rain monitoring.",
       },
       {
         request,
@@ -74,7 +72,6 @@ describe("normalizeWeatherAiWeather", () => {
         humidityPercent: 68,
         windSpeedKph: 18,
       },
-      aiSummary: "Field conditions are workable with rain monitoring.",
       fetchedAt: "2026-06-05T09:00:00.000Z",
       source: "weatherai",
     });
@@ -341,21 +338,22 @@ describe("normalizeWeatherAiWeather", () => {
     ]);
   });
 
-  it("omits AI summary when includeAi is false", () => {
+  it("ignores AI summary fields from upstream weather payloads", () => {
     const normalized = normalizeWeatherAiWeather(
       {
         aiSummary: "This should not be returned.",
+        summary: "This should also not be returned.",
+        ai: {
+          summary: "This nested value should not be returned.",
+        },
       },
       {
-        request: {
-          ...request,
-          includeAi: false,
-        },
+        request,
         fetchedAt: "2026-06-05T09:00:00.000Z",
         source: "weatherai",
       },
     );
 
-    expect(normalized.dashboard.aiSummary).toBeUndefined();
+    expect(normalized.dashboard).not.toHaveProperty("aiSummary");
   });
 });
