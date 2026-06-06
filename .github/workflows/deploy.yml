@@ -1,0 +1,72 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Firebase
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    permissions:
+      contents: read
+
+    env:
+      FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+      VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+      VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+      VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+      VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+      VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+      VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+      VITE_FUNCTIONS_BASE_URL: ${{ secrets.VITE_FUNCTIONS_BASE_URL }}
+      VITE_ENABLE_DEMO_MODE: ${{ vars.VITE_ENABLE_DEMO_MODE || 'false' }}
+      WEATHERAI_API_KEY: ${{ secrets.WEATHERAI_API_KEY }}
+      WEATHERAI_BASE_URL: ${{ vars.WEATHERAI_BASE_URL || 'https://api.weather-ai.co' }}
+      ALLOWED_ORIGINS: ${{ secrets.ALLOWED_ORIGINS }}
+      ENABLE_DEMO_MODE: ${{ vars.ENABLE_DEMO_MODE || 'false' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Create Functions runtime env file
+        run: |
+          {
+            echo "WEATHERAI_API_KEY=${WEATHERAI_API_KEY}"
+            echo "WEATHERAI_BASE_URL=${WEATHERAI_BASE_URL}"
+            echo "ALLOWED_ORIGINS=${ALLOWED_ORIGINS}"
+            echo "ENABLE_DEMO_MODE=${ENABLE_DEMO_MODE}"
+          } > functions/.env
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
+
+      - name: Deploy Firebase resources
+        run: pnpm exec firebase deploy --project "$FIREBASE_PROJECT_ID"

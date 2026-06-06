@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "echo \"web lint is not configured yet\"",
     "test": "vitest run",
-    "e2e": "echo \"web e2e tests are not configured yet\""
+    "e2e": "playwright test"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
@@ -29,6 +29,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",

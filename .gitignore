@@ -6,6 +6,8 @@ dist/
 build/
 coverage/
 functions/lib/
+playwright-report/
+test-results/
 .turbo/
 .vite/
 
