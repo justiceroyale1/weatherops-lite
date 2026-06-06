@@ -22,21 +22,6 @@ jobs:
     permissions:
       contents: read
 
-    env:
-      FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
-      VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
-      VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
-      VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
-      VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
-      VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
-      VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
-      VITE_FUNCTIONS_BASE_URL: ${{ secrets.VITE_FUNCTIONS_BASE_URL }}
-      VITE_ENABLE_DEMO_MODE: ${{ vars.VITE_ENABLE_DEMO_MODE || 'false' }}
-      WEATHERAI_API_KEY: ${{ secrets.WEATHERAI_API_KEY }}
-      WEATHERAI_BASE_URL: ${{ vars.WEATHERAI_BASE_URL || 'https://api.weather-ai.co' }}
-      ALLOWED_ORIGINS: ${{ secrets.ALLOWED_ORIGINS }}
-      ENABLE_DEMO_MODE: ${{ vars.ENABLE_DEMO_MODE || 'false' }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -60,7 +45,24 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build
+        env:
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+          VITE_FUNCTIONS_BASE_URL: ${{ secrets.VITE_FUNCTIONS_BASE_URL }}
+          VITE_ENABLE_DEMO_MODE: ${{ vars.VITE_ENABLE_DEMO_MODE || 'false' }}
+        run: pnpm build
+
       - name: Create Functions runtime env file
+        env:
+          ALLOWED_ORIGINS: ${{ secrets.ALLOWED_ORIGINS }}
+          ENABLE_DEMO_MODE: ${{ vars.ENABLE_DEMO_MODE || 'false' }}
+          WEATHERAI_API_KEY: ${{ secrets.WEATHERAI_API_KEY }}
+          WEATHERAI_BASE_URL: ${{ vars.WEATHERAI_BASE_URL || 'https://api.weather-ai.co' }}
         run: |
           {
             echo "WEATHERAI_API_KEY=${WEATHERAI_API_KEY}"
@@ -69,14 +71,7 @@ jobs:
             echo "ENABLE_DEMO_MODE=${ENABLE_DEMO_MODE}"
           } > functions/.env
 
-      - name: Typecheck
-        run: pnpm typecheck
-
-      - name: Test
-        run: pnpm test
-
-      - name: Build
-        run: pnpm build
-
       - name: Deploy Firebase resources
+        env:
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
         run: pnpm exec firebase deploy --project "$FIREBASE_PROJECT_ID"

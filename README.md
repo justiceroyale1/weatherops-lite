@@ -154,7 +154,7 @@ CI is configured in `.github/workflows/ci.yml` and runs on pushes to `main` and 
 - Build web and functions.
 - Run E2E smoke tests.
 
-Manual deployment is configured in `.github/workflows/deploy.yml`.
+Deployment is configured in `.github/workflows/deploy.yml`. It can be run manually from GitHub Actions, and it also runs automatically after the `CI` workflow completes successfully on `main`. Pull request CI runs do not deploy, and failed CI runs do not deploy. The deploy workflow does not repeat typecheck or test steps; automatic deploys rely on the completed CI run, while manual deploys assume checks were already run or are being intentionally bypassed.
 
 Required GitHub secrets:
 
