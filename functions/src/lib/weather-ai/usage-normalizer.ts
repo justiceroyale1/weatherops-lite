@@ -12,29 +12,34 @@ export function normalizeWeatherAiUsage(
   const data = asRecord(root.data) ?? asRecord(root.usage) ?? root;
   const requests = asRecord(data.requests);
   const aiRequests = asRecord(data.aiRequests) ?? asRecord(data.ai);
+  const limits = asRecord(data.limits);
   const period = asRecord(data.period);
   const plan = stringFrom(data.plan, data.planName, data.tier);
   const requestsUsed = numberFrom(
     data.requestsUsed,
     data.requestCount,
+    period?.requestCount,
     requests?.used,
     requests?.current,
   );
   const requestsLimit = numberFrom(
     data.requestsLimit,
     data.requestLimit,
+    limits?.requests,
     requests?.limit,
     requests?.max,
   );
   const aiRequestsUsed = numberFrom(
     data.aiRequestsUsed,
     data.aiRequestCount,
+    period?.aiRequestCount,
     aiRequests?.used,
     aiRequests?.current,
   );
   const aiRequestsLimit = numberFrom(
     data.aiRequestsLimit,
     data.aiRequestLimit,
+    limits?.aiRequests,
     aiRequests?.limit,
     aiRequests?.max,
   );
