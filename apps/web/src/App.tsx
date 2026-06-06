@@ -88,18 +88,18 @@ export function App() {
           </div>
         </header>
 
-        <div className="grid gap-4 xl:grid-cols-[0.95fr_1.25fr]">
-          <div className="space-y-4">
-            <SavedLocationsPanel
-              isRefreshing={weatherReport.isPending}
-              onUseLocation={handleUseLocation}
-            />
-            <UsageCard />
-          </div>
-          <WeatherForm
-            isSubmitting={weatherReport.isPending}
-            onSubmit={handleSubmit}
+        <div className="flex flex-wrap gap-4 rounded-lg border bg-card p-4 shadow-sm md:flex-row md:items-start">
+          <SavedLocationsPanel
+            isRefreshing={weatherReport.isPending}
+            onUseLocation={handleUseLocation}
           />
+          <div className="flex flex-1 flex-col gap-4">
+            <UsageCard />
+            <WeatherForm
+              isSubmitting={weatherReport.isPending}
+              onSubmit={handleSubmit}
+            />
+          </div>
         </div>
 
         {weatherReport.isError ? (

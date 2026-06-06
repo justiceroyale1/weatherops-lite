@@ -17,7 +17,7 @@ export function UsageCard() {
 
   if (usage.isLoading) {
     return (
-      <Card>
+      <Card className="flex-1">
         <CardHeader>
           <CardTitle>API Usage</CardTitle>
         </CardHeader>
@@ -36,7 +36,7 @@ export function UsageCard() {
       usage.error instanceof Error ? usage.error.message : "Usage unavailable";
 
     return (
-      <Card>
+      <Card className="flex-1">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Activity aria-hidden="true" className="h-4 w-4" />

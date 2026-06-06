@@ -71,7 +71,7 @@ export function SavedLocationsPanel({
           : undefined;
 
   return (
-    <Card>
+    <Card className="flex-1">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <MapPin aria-hidden="true" className="h-4 w-4" />
