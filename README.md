@@ -200,9 +200,3 @@ The workflow writes a transient `functions/.env` file from GitHub secrets/variab
 - Live URL and screenshots must be filled in after the Firebase deployment is complete.
 - Demo fallback data is deterministic and labeled; it is not presented as live WeatherAI data.
 - Tree analysis depends on WeatherAI plan availability when not using demo fallback.
-
-## Commit Policy
-
-Coordination docs for product ownership, agent workflow, task review, and roadmap tracking live one directory above this repository in `weather-ai-tech-challenge/`.
-
-No coding or reviewer agent should commit directly unless the human owner explicitly approves. A task may be committed only after reviewer approval and human owner approval.
