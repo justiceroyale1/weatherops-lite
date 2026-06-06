@@ -1,8 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 
 import { SavedLocationsPanel } from "@/features/locations/saved-locations-panel";
-import { TreeAnalysisPanel } from "@/features/tree-analysis/tree-analysis-panel";
 import { UsageCard } from "@/features/usage/usage-card";
 import {
   DashboardEmptyState,
@@ -15,6 +14,12 @@ import { WeatherForm } from "@/features/weather/weather-form";
 import type { WeatherFormValues } from "@/lib/validations/weather";
 import type { LocationProfile } from "@/types/location";
 import type { WeatherRequest } from "@/types/weather";
+
+const TreeAnalysisPanel = lazy(() =>
+  import("@/features/tree-analysis/tree-analysis-panel").then((module) => ({
+    default: module.TreeAnalysisPanel,
+  })),
+);
 
 export function App() {
   const [lastRequest, setLastRequest] = useState<WeatherRequest>({
@@ -122,9 +127,22 @@ export function App() {
           <DashboardEmptyState />
         ) : null}
 
-        <TreeAnalysisPanel />
+        <Suspense fallback={<TreeAnalysisLoadingState />}>
+          <TreeAnalysisPanel />
+        </Suspense>
       </div>
     </main>
+  );
+}
+
+function TreeAnalysisLoadingState() {
+  return (
+    <section
+      aria-label="Tree analysis loading"
+      className="rounded-lg border bg-card p-6 text-sm text-muted-foreground"
+    >
+      Loading tree analysis...
+    </section>
   );
 }
 
